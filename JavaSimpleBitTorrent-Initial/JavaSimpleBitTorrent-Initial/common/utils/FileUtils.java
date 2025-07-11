@@ -26,7 +26,7 @@ public class FileUtils {
         for (File file : files) {
             if (file.isFile()) {
                 try {
-                    String hash = HashFile(folderPath);
+                    String hash = HashFile(file.getAbsolutePath());
                     fileHashMap.put(file.getName(), hash);
                 } catch (Exception e) {
                     e.printStackTrace();
