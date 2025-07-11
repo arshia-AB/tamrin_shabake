@@ -46,14 +46,14 @@ public class TrackerApp {
 		connections.clear();
 	}
 
-	public static void removePeerConnection(PeerConnectionThread peerConnectionThread) {
+	public static synchronized void removePeerConnection(PeerConnectionThread peerConnectionThread) {
 		if (peerConnectionThread != null) {
 			connections.remove(peerConnectionThread);
 			peerConnectionThread.end();
 		}
 	}
 
-	public static void addPeerConnection(PeerConnectionThread peerConnectionThread) {
+	public static synchronized void addPeerConnection(PeerConnectionThread peerConnectionThread) {
 		if (peerConnectionThread != null && !connections.contains(peerConnectionThread))
 			connections.add(peerConnectionThread);
 	}

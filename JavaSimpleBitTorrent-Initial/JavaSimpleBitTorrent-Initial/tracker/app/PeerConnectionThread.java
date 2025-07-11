@@ -26,17 +26,23 @@ public class PeerConnectionThread extends ConnectionThread {
         try {
             Message statusCommand = Message.createCommand("status");
 
+
             Message response = sendAndWaitForResponse(statusCommand, TIMEOUT_MILLIS);
 
             if (response != null &&
                     response.getType() == Message.Type.response &&
                     "status".equals(response.getFromBody("command")) &&
                     "ok".equals(response.getFromBody("response"))) {
-
                 String peerIp = response.getFromBody("peer");
                 int listenPort = (int) ((double) response.getFromBody("listen_port"));
 
+                setOtherSideIP(peerIp);
+                setOtherSidePort(listenPort);
+                this.setPeerIp(peerIp);
+                this.setListenPort(listenPort);
+
                 TrackerConnectionController.updatePeerInfo(this, peerIp, listenPort);
+                TrackerApp.addPeerConnection(this);
 
                 refreshFileList();
 
