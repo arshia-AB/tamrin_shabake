@@ -10,9 +10,14 @@ public class TrackerApp {
 	private static ListenerThread listenerThread;
 
 	public static PeerConnectionThread getConnectionByIpPort(String ip, int port) {
-		// TODO: Implement peer connection lookup
+		for (PeerConnectionThread connection : connections) {
+			if (ip.equals(connection.getPeerIp()) && port == connection.getListenPort()) {
+				return connection;
+			}
+		}
 		return null;
 	}
+
 
 	public static boolean isEnded() {
 		return exitFlag;
