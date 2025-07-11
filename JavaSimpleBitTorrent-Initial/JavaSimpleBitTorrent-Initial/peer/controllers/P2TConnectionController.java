@@ -2,41 +2,79 @@ package peer.controllers;
 
 import common.models.Message;
 import peer.app.P2TConnectionThread;
+import peer.app.PeerApp;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class P2TConnectionController {
-	public static Message handleCommand(Message message) {
-		// TODO: Handle incoming tracker-to-peer commands
-		// 1. Parse command from message
-		// 2. Call appropriate handler (status, get_files_list, get_sends, get_receives)
-		// 3. Return response message
-		throw new UnsupportedOperationException("handleCommand not implemented yet");
-	}
 
-	private static Message getReceives() {
-		// TODO: Return information about received files
-		throw new UnsupportedOperationException("getReceives not implemented yet");
-	}
+    public static Message handleCommand(Message message) {
+        String cmd = message.getFromBody("command");
+        switch (cmd) {
+            case "status":
+                return status();
+            case "get_files_list":
+                return getFilesList();
+            case "get_sends":
+                return getSends();
+            case "get_receives":
+                return getReceives();
+            default:
+                throw new IllegalStateException("Unexpected value: " + message.getFromBody("command").toString());
+        }
+    }
 
-	private static Message getSends() {
-		// TODO: Return information about sent files
-		throw new UnsupportedOperationException("getSends not implemented yet");
-	}
+    public static Message status() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("ip", PeerApp.getPeerIP());
+        body.put("port", PeerApp.getPeerPort());
+        body.put("alive", !PeerApp.isEnded());
+        return new Message(body, Message.Type.response);
+    }
 
-	public static Message getFilesList() {
-		// TODO: Return list of files in shared folder
-		throw new UnsupportedOperationException("getFilesList not implemented yet");
-	}
+    public static Message getFilesList() {
+        File folder = new File(PeerApp.getSharedFolderPath());
+        File[] files = folder.listFiles();
 
-	public static Message status() {
-		// TODO: Return peer status information
-		throw new UnsupportedOperationException("status not implemented yet");
-	}
+        List<String> fileNames = new ArrayList<>();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    fileNames.add(f.getName());
+                }
+            }
+        }
 
-	public static Message sendFileRequest(P2TConnectionThread tracker, String fileName) throws Exception {
-		// TODO: Send file request to tracker and handle response
-		// 1. Build request message
-		// 2. Send message and wait for response
-		// 3. raise exception if error or return response
-		throw new UnsupportedOperationException("sendFileRequest not implemented yet");
-	}
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("files", fileNames);
+        return new Message(body, Message.Type.response);
+    }
+
+    private static Message getSends() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("sent", PeerApp.getSentFiles());
+        return new Message(body, Message.Type.response);
+    }
+
+    private static Message getReceives() {
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("received", PeerApp.getReceivedFiles());
+        return new Message(body, Message.Type.response);
+    }
+
+    public static Message sendFileRequest(P2TConnectionThread tracker, String fileName) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("type", "file_request");
+        map.put("name", fileName);
+        Message response = tracker.sendAndWaitForResponse(new Message(map, Message.Type.file_request), PeerApp.TIMEOUT_MILLIS);
+        if (response == null || response.getType() != Message.Type.response) {
+            throw new Exception("error request file: " + fileName);
+        } else {
+            return response;
+        }
+
+    }
 }

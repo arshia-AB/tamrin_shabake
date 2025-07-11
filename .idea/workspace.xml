@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="5th" />
+    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="handle connection fixed">
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCommands.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -148,8 +151,27 @@
       <option name="project" value="LOCAL" />
       <updated>1752252685066</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="handle connection fixed">
+      <option name="closed" value="true" />
+      <created>1752252828990</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1752252828990</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="second commit" />
@@ -158,6 +180,7 @@
     <MESSAGE value="4th commit" />
     <MESSAGE value="4th commit(updated)" />
     <MESSAGE value="5th" />
-    <option name="LAST_COMMIT_MESSAGE" value="5th" />
+    <MESSAGE value="handle connection fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="handle connection fixed" />
   </component>
 </project>
