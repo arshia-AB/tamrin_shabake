@@ -25,7 +25,14 @@ public class P2PListenerThread extends Thread {
             Message message = Message.readFrom(socket.getInputStream());
 
             if (message.getType() == Message.Type.download_request) {
-                TorrentP2PThread torrentThread = new TorrentP2PThread(socket, message);
+                String fileName = message.getFromBody("name");
+                String receiverIP = message.getFromBody("receiver_ip");
+                int receiverPort = message.getIntFromBody("receiver_port");
+                String receiver = receiverIP + ":" + receiverPort;
+
+                File file = new File(PeerApp.getSharedFolderPath() + File.separator + fileName);
+
+                TorrentP2PThread torrentThread = new TorrentP2PThread(socket, file, receiver);
                 torrentThread.start();
             } else {
                 socket.close();
