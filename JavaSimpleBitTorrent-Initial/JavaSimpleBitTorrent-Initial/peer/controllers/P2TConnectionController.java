@@ -28,11 +28,12 @@ public class P2TConnectionController {
     }
 
     public static Message status() {
-        HashMap<String, Object> body = new HashMap<>();
-        body.put("ip", PeerApp.getPeerIP());
-        body.put("port", PeerApp.getPeerPort());
-        body.put("alive", !PeerApp.isEnded());
-        return new Message(body, Message.Type.response);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("command", "status");
+        map.put("response", "ok");
+        map.put("peer", PeerApp.getPeerIP());
+        map.put("listen_port", PeerApp.getPeerPort());
+        return new Message(map,Message.Type.response);
     }
 
     public static Message getFilesList() {
