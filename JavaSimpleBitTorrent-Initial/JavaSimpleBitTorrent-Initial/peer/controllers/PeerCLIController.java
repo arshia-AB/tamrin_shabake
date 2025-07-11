@@ -55,11 +55,9 @@ public class PeerCLIController {
 				return "Invalid file name.";
 			}
 
-			// 1. Send request to tracker
 			P2TConnectionThread tracker = PeerApp.getP2TConnection();
 			Message response = P2TConnectionController.sendFileRequest(tracker, fileName);
 
-			// 2. Tracker must return: sender_ip, sender_port, md5
 			String senderIP = (String) response.getFromBody("sender_ip");
 			int senderPort = (int) response.getFromBody("sender_port");
 			String md5 = (String) response.getFromBody("md5");
@@ -68,7 +66,6 @@ public class PeerCLIController {
 				return "Tracker response invalid.";
 			}
 
-			// 3. Request file from peer
 			boolean success = PeerApp.requestDownload(senderIP, senderPort, fileName, md5);
 			if (success) {
 				return "Download completed successfully.";
