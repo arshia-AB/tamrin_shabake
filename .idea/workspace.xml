@@ -4,17 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="" />
+    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/common/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/common/models/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/app/PeerConnectionThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/app/PeerConnectionThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "arshia-AB"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/arshia-AB/tamrin_shabake.git",
+    "accountId": "aa492279-00dd-4511-bf73-35ca95f72b59"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="2zdQWjagbDs9dNfwIIjI15jpyy6" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -24,6 +48,7 @@
     "Application.PeerMain.executor": "Debug",
     "Application.TrackerMain.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "J:/AP/untildawn",
     "project.structure.last.edited": "Libraries",

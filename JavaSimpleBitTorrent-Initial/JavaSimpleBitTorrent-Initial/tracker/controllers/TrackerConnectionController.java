@@ -3,32 +3,102 @@ package tracker.controllers;
 import common.models.Message;
 import tracker.app.PeerConnectionThread;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TrackerConnectionController {
+	// لیست همه Peer ها: کلید=آدرس+پورت، مقدار=PeerConnectionThread
+	private static final Map<String, PeerConnectionThread> peers = new ConcurrentHashMap<>();
+
+	/**
+	 * هندل کردن درخواست file_request از طرف Peer.
+	 */
 	public static Message handleCommand(Message message) {
-		// TODO: Handle incoming peer-to-tracker commands
-		// 1. Validate message type and content
-		// 2. Find peers having the requested file
-		// 3. Check for hash consistency
-		// 4. Return peer information or error
-		throw new UnsupportedOperationException("handleCommand not implemented yet");
+		try {
+			String fileName = message.getFromBody("file_name");
+			String fileHash = message.getFromBody("file_hash");
+
+			if (fileName == null || fileHash == null) {
+				return createErrorResponse("Invalid request: missing file_name or file_hash");
+			}
+
+			// پیدا کردن لیست Peer هایی که این فایل رو دارند
+			List<Map<String, Object>> matchingPeers = new ArrayList<>();
+
+			for (PeerConnectionThread peer : peers.values()) {
+				Map<String, String> files = peer.getFileAndHashes();
+				String hash = files.get(fileName);
+				if (hash != null && hash.equals(fileHash)) {
+					Map<String, Object> peerInfo = new HashMap<>();
+					peerInfo.put("ip", peer.getSocket().getInetAddress().getHostAddress());
+					peerInfo.put("listen_port", peer.getListenPort());
+					matchingPeers.add(peerInfo);
+				}
+			}
+
+			HashMap<String, Object> body = new HashMap<>();
+			body.put("command", "file_request");
+			body.put("response", "ok");
+			body.put("peers", matchingPeers);
+
+			return new Message(body, Message.Type.response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return createErrorResponse("Server error: " + e.getMessage());
+		}
 	}
 
+	/**
+	 * گرفتن لیست فایل‌هایی که این Peer ارسال می‌کند.
+	 */
 	public static Map<String, List<String>> getSends(PeerConnectionThread connection) {
-		// TODO: Get list of files sent by a peer
-		// 1. Build command message
-		// 2. Send message and wait for response
-		// 3. Parse and return sent files map
-		throw new UnsupportedOperationException("getSends not implemented yet");
+		try {
+			Message msg = Message.createCommand("get_sends");
+			Message response = connection.sendAndWaitForResponse(msg, 3000);
+
+			if (response != null && "get_sends".equals(response.getFromBody("command"))) {
+				return response.getFromBody("files");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyMap();
 	}
 
+	/**
+	 * گرفتن لیست فایل‌هایی که این Peer دریافت می‌کند.
+	 */
 	public static Map<String, List<String>> getReceives(PeerConnectionThread connection) {
-		// TODO: Get list of files received by a peer
-		// 1. Build command message
-		// 2. Send message and wait for response
-		// 3. Parse and return received files map
-		throw new UnsupportedOperationException("getReceives not implemented yet");
+		try {
+			Message msg = Message.createCommand("get_receives");
+			Message response = connection.sendAndWaitForResponse(msg, 3000);
+
+			if (response != null && "get_receives".equals(response.getFromBody("command"))) {
+				return response.getFromBody("files");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyMap();
+	}
+
+	/**
+	 * اضافه یا به‌روزرسانی اطلاعات Peer
+	 */
+	public static void updatePeerInfo(PeerConnectionThread peer, String ip, int port) {
+		peer.setPeerIp(ip);
+		peer.setListenPort(port);
+		String key = ip + ":" + port;
+		peers.put(key, peer);
+	}
+
+	/**
+	 * ایجاد پیام خطا
+	 */
+	private static Message createErrorResponse(String errorMsg) {
+		HashMap<String, Object> body = new HashMap<>();
+		body.put("response", "error");
+		body.put("message", errorMsg);
+		return new Message(body, Message.Type.response);
 	}
 }

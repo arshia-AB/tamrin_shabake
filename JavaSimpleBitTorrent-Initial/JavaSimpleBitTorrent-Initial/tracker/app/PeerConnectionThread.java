@@ -12,52 +12,124 @@ import java.util.Map;
 import static tracker.app.TrackerApp.TIMEOUT_MILLIS;
 
 public class PeerConnectionThread extends ConnectionThread {
-	private HashMap<String, String> fileAndHashes;
+    private HashMap<String, String> fileAndHashes = new HashMap<>();
 
-	public PeerConnectionThread(Socket socket) throws IOException {
-		super(socket);
-	}
+    private String peerIp;
+    private int listenPort;
 
-	@Override
-	public boolean initialHandshake() {
-		try {
-			// TODO: Implement initial handshake
-			// Refresh peer status (IP and port), Get peer's file list, Add connection to tracker's connection list
-			throw new UnsupportedOperationException("Initial handshake not implemented yet");
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public PeerConnectionThread(Socket socket) throws IOException {
+        super(socket);
+    }
 
-	public void refreshStatus() {
-		// TODO: Implement status refresh
-		// Send status command and update peer's IP and port and wait for response
-		// then update peer's IP and port
-		throw new UnsupportedOperationException("Status refresh not implemented yet");
-	}
+    @Override
+    public boolean initialHandshake() {
+        try {
+            Message statusCommand = Message.createCommand("status");
 
-	public void refreshFileList() {
-		// TODO: Implement file list refresh
-		// Request and update peer's file list
-		throw new UnsupportedOperationException("File list refresh not implemented yet");
-	}
+            Message response = sendAndWaitForResponse(statusCommand, TIMEOUT_MILLIS);
 
-	@Override
-	protected boolean handleMessage(Message message) {
-		if (message.getType() == Message.Type.file_request) {
-			sendMessage(TrackerConnectionController.handleCommand(message));
-			return true;
-		}
-		return false;
-	}
+            if (response != null &&
+                    response.getType() == Message.Type.response &&
+                    "status".equals(response.getFromBody("command")) &&
+                    "ok".equals(response.getFromBody("response"))) {
 
-	@Override
-	public void run() {
-		super.run();
-		TrackerApp.removePeerConnection(this);
-	}
+                String peerIp = response.getFromBody("peer");
+                int listenPort = (int) ((double) response.getFromBody("listen_port"));
 
-	public Map<String, String> getFileAndHashes() {
-		return Map.copyOf(fileAndHashes);
-	}
+                TrackerConnectionController.updatePeerInfo(this, peerIp, listenPort);
+
+                refreshFileList();
+
+                return true;
+            } else {
+                System.err.println("initialHandshake: invalid response");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void refreshStatus() {
+        try {
+            Message statusCommand = Message.createCommand("status");
+
+            Message response = sendAndWaitForResponse(statusCommand, TIMEOUT_MILLIS);
+
+            if (response != null &&
+                    response.getType() == Message.Type.response &&
+                    "status".equals(response.getFromBody("command")) &&
+                    "ok".equals(response.getFromBody("response"))) {
+
+                String peerIp = response.getFromBody("peer");
+                int listenPort = (int) ((double) response.getFromBody("listen_port"));
+
+                TrackerConnectionController.updatePeerInfo(this, peerIp, listenPort);
+            } else {
+                System.err.println("refreshStatus: invalid response");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshFileList() {
+        try {
+            Message fileListCommand = Message.createCommand("file_list");
+
+            Message response = sendAndWaitForResponse(fileListCommand, TIMEOUT_MILLIS);
+
+            if (response != null &&
+                    response.getType() == Message.Type.response &&
+                    "file_list".equals(response.getFromBody("command"))) {
+
+                HashMap<String, String> files = response.getFromBody("files");
+
+                if (files != null) {
+                    fileAndHashes = new HashMap<>(files);
+                } else {
+                    System.err.println("refreshFileList: files not found in response");
+                }
+            } else {
+                System.err.println("refreshFileList: invalid response");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected boolean handleMessage(Message message) {
+        if (message.getType() == Message.Type.file_request) {
+            sendMessage(TrackerConnectionController.handleCommand(message));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        TrackerApp.removePeerConnection(this);
+    }
+
+    public Map<String, String> getFileAndHashes() {
+        return Map.copyOf(fileAndHashes);
+    }
+
+    public String getPeerIp() {
+        return peerIp;
+    }
+
+    public int getListenPort() {
+        return listenPort;
+    }
+
+    public void setPeerIp(String peerIp) {
+        this.peerIp = peerIp;
+    }
+
+    public void setListenPort(int listenPort) {
+        this.listenPort = listenPort;
+    }
 }
