@@ -46,7 +46,7 @@ public class TrackerCLIController {
 
 
     private static String getSends(String ip, int port) {
-        PeerConnectionThread peer = TrackerApp.getConnectionByIpPort(ip, Integer.parseInt(port));
+        PeerConnectionThread peer = TrackerApp.getConnectionByIpPort(ip, port);
         if (peer == null) {
             return "Peer not found.";
         }
