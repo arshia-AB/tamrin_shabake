@@ -73,30 +73,60 @@ public class PeerConnectionThread extends ConnectionThread {
         }
     }
 
-    public void refreshFileList() {
+    public boolean refreshFileList() {
         try {
-            Message fileListCommand = Message.createCommand("file_list");
+            HashMap<String, Object> body = new HashMap<>();
+            body.put("command", "get_files_list");
 
-            Message response = sendAndWaitForResponse(fileListCommand, TIMEOUT_MILLIS);
+            Message response = sendAndWaitForResponse(new Message(body, Message.Type.command), TIMEOUT_MILLIS);
 
-            if (response != null &&
-                    response.getType() == Message.Type.response &&
-                    "file_list".equals(response.getFromBody("command"))) {
-
-                HashMap<String, String> files = response.getFromBody("files");
-
-                if (files != null) {
-                    fileAndHashes = new HashMap<>(files);
-                } else {
-                    System.err.println("refreshFileList: files not found in response");
-                }
-            } else {
-                System.err.println("refreshFileList: invalid response");
+            if (response == null) {
+                System.err.println("refreshFileList: response is null");
+                this.end();
+                return false;
             }
+
+            Object respValue = response.getFromBody("response");
+            if (respValue == null) {
+                System.err.println("refreshFileList: response field is missing");
+                this.end();
+                return false;
+            }
+
+            if (!"ok".equals(String.valueOf(respValue))) {
+                System.err.println("refreshFileList: response not ok, got: " + respValue);
+                this.end();
+                return false;
+            }
+
+            Object filesObj = response.getFromBody("files");
+            if (filesObj == null) {
+                System.err.println("refreshFileList: files field is missing");
+                return false;
+            }
+
+            if (filesObj instanceof Map<?, ?> filesMap) {
+                synchronized (this.fileAndHashes) {
+                    this.fileAndHashes.clear();
+                    for (Map.Entry<?, ?> entry : filesMap.entrySet()) {
+                        if (entry.getKey() instanceof String key && entry.getValue() instanceof String value) {
+                            this.fileAndHashes.put(key, value);
+                        }
+                    }
+                }
+                return true;
+            } else {
+                System.err.println("refreshFileList: files is not a Map");
+                return false;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            this.end();
+            return false;
         }
     }
+
 
     @Override
     protected boolean handleMessage(Message message) {

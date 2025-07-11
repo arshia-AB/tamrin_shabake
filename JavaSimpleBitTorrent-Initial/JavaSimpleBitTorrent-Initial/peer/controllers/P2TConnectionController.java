@@ -33,26 +33,34 @@ public class P2TConnectionController {
         map.put("response", "ok");
         map.put("peer", PeerApp.getPeerIP());
         map.put("listen_port", PeerApp.getPeerPort());
-        return new Message(map,Message.Type.response);
+        return new Message(map, Message.Type.response);
     }
 
     public static Message getFilesList() {
         File folder = new File(PeerApp.getSharedFolderPath());
         File[] files = folder.listFiles();
 
-        List<String> fileNames = new ArrayList<>();
+        HashMap<String, String> fileAndHashes = new HashMap<>();
         if (files != null) {
             for (File f : files) {
                 if (f.isFile()) {
-                    fileNames.add(f.getName());
+                    try {
+                        String hash = common.utils.MD5Hash.HashFile(f.getAbsolutePath());
+                        fileAndHashes.put(f.getName(), hash);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         HashMap<String, Object> body = new HashMap<>();
-        body.put("files", fileNames);
+        body.put("command", "get_files_list");
+        body.put("response", "ok");
+        body.put("files", fileAndHashes);
         return new Message(body, Message.Type.response);
     }
+
 
     private static Message getSends() {
         HashMap<String, Object> body = new HashMap<>();
