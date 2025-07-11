@@ -1,5 +1,10 @@
 package peer.app;
 
+import common.models.Message;
+import common.utils.JSONUtils;
+
+import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,32 +12,47 @@ import java.net.Socket;
 import static peer.app.PeerApp.TIMEOUT_MILLIS;
 
 public class P2PListenerThread extends Thread {
-	private final ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
 
-	public P2PListenerThread(int port) throws IOException {
-		this.serverSocket = new ServerSocket(port);
-	}
+    public P2PListenerThread(int port) throws IOException {
+        this.serverSocket = new ServerSocket(port);
+    }
 
-	private void handleConnection(Socket socket) throws Exception {
-		// TODO: Implement peer connection handling
-		// 1. Set socket timeout
-		// 2. Read incoming message
-		// 3. Parse message type
-		// 4. Handle download requests by starting a new TorrentP2PThread
-		// 5. Close socket for other message types (EOF)
-	}
+    private void handleConnection(Socket socket) throws Exception {
+        socket.setSoTimeout(TIMEOUT_MILLIS);
 
-	@Override
-	public void run() {
-		while (!PeerApp.isEnded()) {
-			try {
-				Socket socket = serverSocket.accept();
-				handleConnection(socket);
-			} catch (Exception e) {
-				break;
-			}
-		}
+        try {
+            Message message = Message.readFrom(socket.getInputStream());
 
-		try {serverSocket.close();} catch (Exception ignored) {}
-	}
+            if (message.getType() == Message.Type.download_request) {
+                TorrentP2PThread torrentThread = new TorrentP2PThread(socket, message);
+                torrentThread.start();
+            } else {
+                socket.close();
+            }
+        } catch (Exception e) {
+            try {
+                socket.close();
+            } catch (IOException ignored) {
+            }
+            throw e;
+        }
+    }
+
+    @Override
+    public void run() {
+        while (!PeerApp.isEnded()) {
+            try {
+                Socket socket = serverSocket.accept();
+                handleConnection(socket);
+            } catch (Exception e) {
+                break;
+            }
+        }
+
+        try {
+            serverSocket.close();
+        } catch (Exception ignored) {
+        }
+    }
 }

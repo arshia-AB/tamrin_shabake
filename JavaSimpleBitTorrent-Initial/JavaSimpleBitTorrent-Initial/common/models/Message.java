@@ -1,5 +1,8 @@
 package common.models;
 
+import common.utils.JSONUtils;
+
+import java.io.*;
 import java.util.HashMap;
 
 public class Message {
@@ -15,6 +18,21 @@ public class Message {
     public Message(HashMap<String, Object> body, Type type) {
         this.body = body;
         this.type = type;
+    }
+
+    public static Message readFrom(InputStream in) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String json = reader.readLine();
+        if (json == null) throw new EOFException("End of stream");
+        return JSONUtils.fromJson(json);
+    }
+
+    public void writeTo(OutputStream out) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+        String json = JSONUtils.toJson(this);
+        writer.write(json);
+        writer.newLine();
+        writer.flush();
     }
 
     public static Message createCommand(String commandName) {

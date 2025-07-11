@@ -1,112 +1,161 @@
 package peer.app;
 
+import common.models.Message;
+import common.utils.JSONUtils;
+import common.utils.MD5Hash;
+
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 public class PeerApp {
-	public static final int TIMEOUT_MILLIS = 500;
+    public static final int TIMEOUT_MILLIS = 500;
 
-	// TODO: static fields for peer's ip, port, shared folder path, sent files, received files, tracker connection thread, p2p listener thread, torrent p2p threads
+    private static String peerIP;
+    private static int peerPort;
+    private static String sharedFolderPath;
 
-	private static boolean exitFlag = false;
+    private static P2TConnectionThread trackerConnectionThread;
+    private static P2PListenerThread p2pListenerThread;
+    private static final List<TorrentP2PThread> torrentThreads = new ArrayList<>();
 
-	public static boolean isEnded() {
-		return exitFlag;
-	}
+    private static final Map<String, List<String>> sentFiles = new HashMap<>();
+    private static final Map<String, List<String>> receivedFiles = new HashMap<>();
 
-	public static void initFromArgs(String[] args) throws Exception {
-		// TODO: Initialize peer with command line arguments
-		// 1. Parse self address (ip:port)
-		// 2. Parse tracker address (ip:port)
-		// 3. Set shared folder path
-		// 4. Create tracker connection thread
-		// 5. Create peer listener thread
-		throw new UnsupportedOperationException("Initialization not implemented yet");
-	}
+    private static boolean exitFlag = false;
 
-	public static void endAll() {
-		exitFlag = true;
-		// TODO: Implement cleanup
-		// 1. End tracker connection
-		// 2. End all torrent threads
-		// 3. Clear file lists
-		throw new UnsupportedOperationException("Cleanup not implemented yet");
-	}
+    public static boolean isEnded() {
+        return exitFlag;
+    }
 
-	public static void connectTracker() {
-		// TODO: Start tracker connection thread
-		// Check if thread exists and not running, then Start thread
-		throw new UnsupportedOperationException("Tracker connection not implemented yet");
-	}
+    public static void initFromArgs(String[] args) throws Exception {
+        if (args.length < 3)
+            throw new IllegalArgumentException("Usage: <self ip:port> <tracker ip:port> <shared_folder_path>");
 
-	public static void startListening() {
-		// TODO: Start peer listener thread
-		// Check if thread exists and not running, then Start thread
-		throw new UnsupportedOperationException("Peer listener thread not implemented yet");
-	}
+        String[] selfParts = args[0].split(":");
+        peerIP = selfParts[0];
+        peerPort = Integer.parseInt(selfParts[1]);
 
-	public static void removeTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
-		// TODO: Remove and cleanup torrent thread
-		throw new UnsupportedOperationException("Torrent P2P thread not implemented yet");
-	}
+        String[] trackerParts = args[1].split(":");
+        String trackerIP = trackerParts[0];
+        int trackerPort = Integer.parseInt(trackerParts[1]);
 
-	public static void addTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
-		// TODO: Add new torrent thread
-		// 1. Check if thread is valid
-		// 2. Check if already exists
-		// 3. Add to list
-		throw new UnsupportedOperationException("Torrent P2P thread not implemented yet");
-	}
+        sharedFolderPath = args[2].trim();
 
-	public static String getSharedFolderPath() {
-		// TODO: Get shared folder path
-		throw new UnsupportedOperationException("Shared folder path not implemented yet");
-	}
+        Socket trackerSocket = new Socket(trackerIP, trackerPort);
+        trackerConnectionThread = new P2TConnectionThread(trackerSocket);
+        p2pListenerThread = new P2PListenerThread(peerPort);
+    }
 
-	public static void addSentFile(String receiver, String fileNameAndHash) {
-		// TODO: Add file to sent files list
-		throw new UnsupportedOperationException("Sent files not implemented yet");
-	}
+    public static void endAll() {
+        exitFlag = true;
+        try {
+            if (trackerConnectionThread != null) trackerConnectionThread.end();
+        } catch (Exception ignored) {
+        }
 
-	public static void addReceivedFile(String sender, String fileNameAndHash) {
-		// TODO: Add file to received files list
-		throw new UnsupportedOperationException("Received files not implemented yet");
-	}
+        for (TorrentP2PThread t : torrentThreads) {
+            try {
+                t.end();
+            } catch (Exception ignored) {
+            }
+        }
+        torrentThreads.clear();
 
-	public static String getPeerIP() {
-		// TODO: Get peer IP address
-		throw new UnsupportedOperationException("Peer IP not implemented yet");
-	}
+        sentFiles.clear();
+        receivedFiles.clear();
+    }
 
-	public static int getPeerPort() {
-		// TODO: Get peer port
-		throw new UnsupportedOperationException("Peer port not implemented yet");
-	}
+    public static void connectTracker() {
+        if (trackerConnectionThread != null && !trackerConnectionThread.isAlive()) {
+            trackerConnectionThread.start();
+        }
+    }
 
-	public static Map<String, List<String>> getSentFiles() {
-		// TODO: Get copy of sent files map
-		throw new UnsupportedOperationException("Sent files not implemented yet");
-	}
+    public static void startListening() {
+        if (p2pListenerThread != null && !p2pListenerThread.isAlive()) {
+            p2pListenerThread.start();
+        }
+    }
 
-	public static Map<String, List<String>> getReceivedFiles() {
-		// TODO: Get copy of received files map
-		throw new UnsupportedOperationException("Received files not implemented yet");
-	}
+    public static void removeTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
+        if (torrentP2PThread != null) {
+            torrentThreads.remove(torrentP2PThread);
+            torrentP2PThread.end();
+        }
+    }
 
-	public static P2TConnectionThread getP2TConnection() {
-		// TODO: Get tracker connection thread
-		throw new UnsupportedOperationException("Tracker connection not implemented yet");
-	}
+    public static void addTorrentP2PThread(TorrentP2PThread torrentP2PThread) {
+        if (torrentP2PThread != null && !torrentThreads.contains(torrentP2PThread)) {
+            torrentThreads.add(torrentP2PThread);
+        }
+    }
 
-	public static void requestDownload(String ip, int port, String filename, String md5) throws Exception {
-		// TODO: Implement file download from peer
-		// 1. Check if file already exists
-		// 2. Create download request message
-		// 3. Connect to peer
-		// 4. Send request
-		// 5. Receive file data
-		// 6. Save file
-		// 7. Verify file integrity
-		// 8. Update received files list
-		throw new UnsupportedOperationException("File download not implemented yet");
-	}
+    public static String getSharedFolderPath() {
+        return sharedFolderPath;
+    }
+
+    public static void addSentFile(String receiver, String fileNameAndHash) {
+        sentFiles.computeIfAbsent(receiver, k -> new ArrayList<>()).add(fileNameAndHash);
+    }
+
+    public static void addReceivedFile(String sender, String fileNameAndHash) {
+        receivedFiles.computeIfAbsent(sender, k -> new ArrayList<>()).add(fileNameAndHash);
+    }
+
+    public static String getPeerIP() {
+        return peerIP;
+    }
+
+    public static int getPeerPort() {
+        return peerPort;
+    }
+
+    public static Map<String, List<String>> getSentFiles() {
+        return new HashMap<>(sentFiles);
+    }
+
+    public static Map<String, List<String>> getReceivedFiles() {
+        return new HashMap<>(receivedFiles);
+    }
+
+    public static P2TConnectionThread getP2TConnection() {
+        return trackerConnectionThread;
+    }
+
+    public static boolean requestDownload(String senderIP, int senderPort, String filename, String md5) throws Exception {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", filename);
+        map.put("md5", md5);
+        map.put("receiver_ip", peerIP);
+        map.put("receiver_port", peerPort);
+        Message downloadMessage = new Message(map, Message.Type.download_request);
+        try {
+            Socket socket = new Socket(senderIP, senderPort);
+            socket.setSoTimeout(TIMEOUT_MILLIS);
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            out.writeUTF(JSONUtils.toJson(downloadMessage));
+            out.flush();
+
+            File sharedFile = new File(sharedFolderPath + File.separator + filename);
+            InputStream in = socket.getInputStream();
+            FileOutputStream fos = new FileOutputStream(sharedFile.getPath());
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
+            String hash = MD5Hash.HashFile(sharedFile.getPath());
+            if (!hash.equals(md5)) {
+                sharedFile.delete();
+                return false;
+            }
+            addReceivedFile(senderIP + ":" + senderPort, filename + " " + md5);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

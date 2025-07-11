@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="third commit (updated)">
+    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="4th commit(updated)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/common/models/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/common/models/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/P2PListenerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/P2PListenerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/PeerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/PeerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/TorrentP2PThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/TorrentP2PThread.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +45,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.PeerMain.executor": "Debug",
+    "Application.PeerMain.executor": "Run",
     "Application.TrackerMain.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
@@ -54,10 +57,11 @@
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.TrackerMain">
+  <component name="RunManager" selected="Application.PeerMain">
     <configuration name="PeerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="peer.PeerMain" />
       <module name="tamrin shabake" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1:2222 127.0.0.1:2000 folder1" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="peer.*" />
@@ -71,7 +75,7 @@
     <configuration name="TrackerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="tracker.TrackerMain" />
       <module name="tamrin shabake" />
-      <option name="PROGRAM_PARAMETERS" value="8080" />
+      <option name="PROGRAM_PARAMETERS" value="2000" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="tracker.*" />
@@ -88,8 +92,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TrackerMain" />
         <item itemvalue="Application.PeerMain" />
+        <item itemvalue="Application.TrackerMain" />
       </list>
     </recent_temporary>
   </component>
@@ -126,13 +130,31 @@
       <option name="project" value="LOCAL" />
       <updated>1752248014687</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="4th commit">
+      <option name="closed" value="true" />
+      <created>1752250333439</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1752250333439</updated>
+    </task>
+    <task id="LOCAL-00005" summary="4th commit(updated)">
+      <option name="closed" value="true" />
+      <created>1752250359146</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1752250359146</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="second commit" />
     <MESSAGE value="second commit (updated)" />
     <MESSAGE value="third commit (updated)" />
-    <option name="LAST_COMMIT_MESSAGE" value="third commit (updated)" />
+    <MESSAGE value="4th commit" />
+    <MESSAGE value="4th commit(updated)" />
+    <option name="LAST_COMMIT_MESSAGE" value="4th commit(updated)" />
   </component>
 </project>
