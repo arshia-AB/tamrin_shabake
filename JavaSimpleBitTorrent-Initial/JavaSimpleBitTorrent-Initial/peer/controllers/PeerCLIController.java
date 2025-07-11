@@ -36,38 +36,53 @@ public class PeerCLIController {
         return FileUtils.getSortedFileList(files);
     }
 
-    private static String handleDownload(String command) {
+    private static String handleDownload(String name) {
+        if (FileUtils.listFilesInFolder(PeerApp.getSharedFolderPath()).containsKey(name)) {
+            return "You already have the file!";
+        }
         try {
-            String[] parts = command.split("\\s+", 2);
-            if (parts.length < 2) {
-                return "Usage: DOWNLOAD <filename>";
+            Message response = P2TConnectionController.sendFileRequest(PeerApp.getP2TConnection(), name);
+
+            System.out.println("Download response body: " + response.getFromBody("response"));
+
+
+            Object responseStatus = response.getFromBody("response");
+            if (responseStatus == null) {
+                return "Invalid response from peer: missing 'response' field";
             }
-            String fileName = parts[1].trim();
-            if (fileName.isEmpty()) {
-                return "Invalid file name.";
+            if ("error".equals(responseStatus)) {
+                Object error = response.getFromBody("error");
+                if (error == null) {
+                    return "Error from peer but no error details provided.";
+                }
+                switch (error.toString()) {
+                    case "not_found":
+                        return "No peer has the file!";
+                    case "multiple_hash":
+                        return "Multiple hashes found!";
+                    default:
+                        return "Peer returned error: " + error.toString();
+                }
+            }
+            if (!"ok".equals(responseStatus)) {
+                return "Unexpected response status: " + responseStatus.toString();
             }
 
-            P2TConnectionThread tracker = PeerApp.getP2TConnection();
-            Message response = P2TConnectionController.sendFileRequest(tracker, fileName);
+            String hash = response.getFromBody("md5").toString();
+            String IP = response.getFromBody("peer_have").toString();
+            int port = response.getIntFromBody("peer_port");
 
-            String senderIP = (String) response.getFromBody("sender_ip");
-            int senderPort = (int) response.getFromBody("sender_port");
-            String md5 = (String) response.getFromBody("md5");
-
-            if (senderIP == null || md5 == null) {
-                return "Tracker response invalid.";
-            }
-
-            boolean success = PeerApp.requestDownload(senderIP, senderPort, fileName, md5);
-            if (success) {
-                return "Download completed successfully.";
+            if (!PeerApp.requestDownload(IP, port, name, hash)) {
+                return "The file has been downloaded from peer but is corrupted!";
             } else {
-                return "Download failed: File verification error.";
+                return "File downloaded successfully: " + name;
             }
         } catch (Exception e) {
             return "Download failed: " + e.getMessage();
         }
     }
+
+
 
     public static String endProgram() {
         PeerApp.endAll();
