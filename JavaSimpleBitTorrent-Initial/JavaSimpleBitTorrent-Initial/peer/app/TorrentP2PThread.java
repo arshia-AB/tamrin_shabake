@@ -34,7 +34,7 @@ public class TorrentP2PThread extends Thread {
 
             PeerApp.addSentFile(receiver, file.getName() + " " + md5);
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         } finally {
             try {
                 dataOutputStream.close();

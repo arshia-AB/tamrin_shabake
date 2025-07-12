@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static peer.app.PeerApp.getSentFiles;
+
 
 public class P2TConnectionController {
 
@@ -69,7 +69,7 @@ public class P2TConnectionController {
         HashMap<String, Object> body = new HashMap<>();
         body.put("command", "get_sends");
         body.put("response", "ok");
-        body.put("sent_files", getSentFiles());
+        body.put("sent_files",PeerApp.getSentFiles());
 
         return new Message(body, Message.Type.response);
     }

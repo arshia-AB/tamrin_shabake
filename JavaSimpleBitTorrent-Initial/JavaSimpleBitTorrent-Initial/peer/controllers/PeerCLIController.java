@@ -8,18 +8,19 @@ import common.models.CorruptedFileException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 public class PeerCLIController {
 
     public static String processCommand(String command) {
         try {
-            if (command.equalsIgnoreCase("END_PROGRAM")) {
+            Matcher matcher = null;
+            if (PeerCommands.END.matches(command)) {
                 return endProgram();
-            } else if (command.equalsIgnoreCase("LIST")) {
+            } else if (PeerCommands.LIST.matches(command)) {
                 return handleListFiles();
-            } else if (command.toUpperCase().startsWith("DOWNLOAD ")) {
-                String fileName = command.substring(9).trim(); // فقط نام فایل
-                return handleDownload(fileName);
+            } else if ((matcher = PeerCommands.DOWNLOAD.getMatcher(command)).matches()) {
+                return handleDownload(matcher.group("name"));
             } else {
                 return "Unknown command.";
             }
@@ -81,8 +82,8 @@ public class PeerCLIController {
         }
     }
 
-    public static String endProgram() {
+    public static void endProgram() {
         PeerApp.endAll();
-        return "Program terminated.";
+
     }
 }

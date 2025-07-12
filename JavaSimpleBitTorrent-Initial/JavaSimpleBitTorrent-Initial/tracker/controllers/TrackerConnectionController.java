@@ -68,7 +68,7 @@ public class TrackerConnectionController {
     public static Map<String, List<String>> getSends(PeerConnectionThread connection) {
         try {
             Message msg = Message.createCommand("get_sends");
-            Message response = connection.sendAndWaitForResponse(msg, 3000);
+            Message response = connection.sendAndWaitForResponse(msg, TIMEOUT_MILLIS);
 
             if (response != null && "get_sends".equals(response.getFromBody("command"))) {
                 return response.getFromBody("sent_files");
@@ -77,6 +77,7 @@ public class TrackerConnectionController {
             e.printStackTrace();
         }
         return Collections.emptyMap();
+
     }
 
 

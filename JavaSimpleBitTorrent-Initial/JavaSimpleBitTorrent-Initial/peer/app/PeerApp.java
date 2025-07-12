@@ -95,11 +95,11 @@ public class PeerApp {
         return sharedFolderPath;
     }
 
-    public static void addSentFile(String receiver, String fileNameAndHash) {
+    public static synchronized void addSentFile(String receiver, String fileNameAndHash) {
         sentFiles.computeIfAbsent(receiver, k -> new ArrayList<>()).add(fileNameAndHash);
     }
 
-    public static void addReceivedFile(String sender, String fileNameAndHash) {
+    public static synchronized void addReceivedFile(String sender, String fileNameAndHash) {
         receivedFiles.computeIfAbsent(sender, k -> new ArrayList<>()).add(fileNameAndHash);
     }
 

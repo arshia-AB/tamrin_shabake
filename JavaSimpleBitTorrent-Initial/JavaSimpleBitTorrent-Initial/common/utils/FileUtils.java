@@ -46,7 +46,7 @@ public class FileUtils {
 
         StringBuilder sb = new StringBuilder();
         for (String fileName : fileNames) {
-            sb.append(fileName).append(":").append(files.get(fileName)).append("\n");
+            sb.append(fileName).append(" ").append(files.get(fileName)).append("\n");
         }
 
         return sb.toString().trim();
