@@ -1,5 +1,6 @@
 package peer.controllers;
 
+import com.google.gson.Gson;
 import common.models.Message;
 import peer.app.P2TConnectionThread;
 import peer.app.PeerApp;
@@ -75,15 +76,21 @@ public class P2TConnectionController {
     }
 
     public static Message sendFileRequest(P2TConnectionThread tracker, String fileName) throws Exception {
+
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", "file_request");
         map.put("name", fileName);
+
+        System.out.println("Sending request to tracker: " + new com.google.gson.Gson().toJson(map));
+
         Message response = tracker.sendAndWaitForResponse(new Message(map, Message.Type.file_request), PeerApp.TIMEOUT_MILLIS);
+
         if (response == null || response.getType() != Message.Type.response) {
             throw new Exception("error request file: " + fileName);
         } else {
             return response;
         }
-
     }
+
+
 }

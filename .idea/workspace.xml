@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="list_peers completed">
-      <change afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/common/models/CorruptedFileException.java" afterDir="false" />
+    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="download is fixing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCLIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +71,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.peer2">
-    <configuration name="PeerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="PeerMain" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="peer.PeerMain" />
       <module name="tamrin shabake" />
       <option name="PROGRAM_PARAMETERS" value="127.0.0.1:1111 127.0.0.1:2000 JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/folder1" />
@@ -86,7 +85,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TrackerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="TrackerMain" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="tracker.TrackerMain" />
       <module name="tamrin shabake" />
       <option name="PROGRAM_PARAMETERS" value="2000" />
@@ -113,12 +112,6 @@
       <item itemvalue="Application.PeerMain" />
       <item itemvalue="Application.TrackerMain" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.PeerMain" />
-        <item itemvalue="Application.TrackerMain" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -241,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752270743125</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="download is fixing">
+      <option name="closed" value="true" />
+      <created>1752323067538</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1752323067538</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -270,6 +271,7 @@
     <MESSAGE value="Ip ham ok shod" />
     <MESSAGE value="download moshkel dare" />
     <MESSAGE value="list_peers completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="list_peers completed" />
+    <MESSAGE value="download is fixing" />
+    <option name="LAST_COMMIT_MESSAGE" value="download is fixing" />
   </component>
 </project>

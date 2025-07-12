@@ -52,6 +52,8 @@ public class PeerCLIController {
             Object respType = response.getFromBody("response");
             if ("error".equals(respType)) {
                 String error = (String) response.getFromBody("error");
+
+
                 if ("not_found".equals(error)) {
                     return "No peer has the file!";
                 } else if ("multiple_hash".equals(error)) {
