@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum TrackerCommands implements CLICommands {
-	END("exit"),
+	END("\\s*exit\\s*"),
 	LIST_PEERS("^\\s*list_peers\\s*$"),
 	LIST_FILES("^\\s*list_files\\s*(?<ip>\\S+):(?<port>\\d+)\\s*$"),
 	REFRESH_FILES("^\\s*refresh_files\\s*$"),

@@ -16,7 +16,7 @@ public class PeerCLIController {
         try {
             Matcher matcher = null;
             if (PeerCommands.END.matches(command)) {
-                return endProgram();
+                 return endProgram();
             } else if (PeerCommands.LIST.matches(command)) {
                 return handleListFiles();
             } else if ((matcher = PeerCommands.DOWNLOAD.getMatcher(command)).matches()) {
@@ -82,8 +82,9 @@ public class PeerCLIController {
         }
     }
 
-    public static void endProgram() {
+    public static String endProgram() {
         PeerApp.endAll();
+        return "";
 
     }
 }
