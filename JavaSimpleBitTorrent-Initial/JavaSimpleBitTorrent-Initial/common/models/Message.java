@@ -56,6 +56,15 @@ public class Message {
         return (T) body.get(fieldName);
     }
 
+    public HashMap<String, Object> getBody() {
+        return body;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{type=" + type + ", body=" + body + '}';
+    }
+
     public int getIntFromBody(String fieldName) {
         return (int) ((double) ((Double) body.get(fieldName)));
     }

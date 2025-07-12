@@ -16,8 +16,8 @@ public class TrackerConnectionController {
         try {
 
             String fileName = message.getFromBody("name");
-            String json = JSONUtils.toJson(message);
-            System.out.println("JSON message: " + json);
+//            String json = JSONUtils.toJson(message);
+//            System.out.println("JSON message: " + json);
             if (fileName == null) {
                 return createErrorResponse("invalid_request");
             }
@@ -69,13 +69,14 @@ public class TrackerConnectionController {
             Message response = connection.sendAndWaitForResponse(msg, 3000);
 
             if (response != null && "get_sends".equals(response.getFromBody("command"))) {
-                return response.getFromBody("files");
+                return response.getFromBody("sent_files");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return Collections.emptyMap();
     }
+
 
 
     public static Map<String, List<String>> getReceives(PeerConnectionThread connection) {

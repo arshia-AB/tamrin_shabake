@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static peer.app.PeerApp.getSentFiles;
+
 public class P2TConnectionController {
 
     public static Message handleCommand(Message message) {
@@ -65,7 +67,10 @@ public class P2TConnectionController {
 
     private static Message getSends() {
         HashMap<String, Object> body = new HashMap<>();
-        body.put("sent", PeerApp.getSentFiles());
+        body.put("command", "get_sends");
+        body.put("response", "ok");
+        body.put("sent_files", getSentFiles());
+
         return new Message(body, Message.Type.response);
     }
 
@@ -81,7 +86,6 @@ public class P2TConnectionController {
         map.put("type", "file_request");
         map.put("name", fileName);
 
-        System.out.println("Sending request to tracker: " + new com.google.gson.Gson().toJson(map));
 
         Message response = tracker.sendAndWaitForResponse(new Message(map, Message.Type.file_request), PeerApp.TIMEOUT_MILLIS);
 
