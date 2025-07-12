@@ -4,6 +4,7 @@ import common.models.Message;
 import common.utils.FileUtils;
 import peer.app.P2TConnectionThread;
 import peer.app.PeerApp;
+import common.models.CorruptedFileException;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,8 @@ public class PeerCLIController {
             } else if (command.equalsIgnoreCase("LIST")) {
                 return handleListFiles();
             } else if (command.toUpperCase().startsWith("DOWNLOAD ")) {
-                return handleDownload(command);
+                String fileName = command.substring(9).trim(); // فقط نام فایل
+                return handleDownload(fileName);
             } else {
                 return "Unknown command.";
             }
@@ -36,53 +38,46 @@ public class PeerCLIController {
         return FileUtils.getSortedFileList(files);
     }
 
-    private static String handleDownload(String name) {
-        if (FileUtils.listFilesInFolder(PeerApp.getSharedFolderPath()).containsKey(name)) {
-            return "You already have the file!";
-        }
+    private static String handleDownload(String fileName) {
         try {
-            Message response = P2TConnectionController.sendFileRequest(PeerApp.getP2TConnection(), name);
-
-            System.out.println("Download response body: " + response.getFromBody("response"));
-
-
-            Object responseStatus = response.getFromBody("response");
-            if (responseStatus == null) {
-                return "Invalid response from peer: missing 'response' field";
+            if (FileUtils.listFilesInFolder(PeerApp.getSharedFolderPath()).containsKey(fileName)) {
+                return "You already have the file!";
             }
-            if ("error".equals(responseStatus)) {
-                Object error = response.getFromBody("error");
-                if (error == null) {
-                    return "Error from peer but no error details provided.";
-                }
-                switch (error.toString()) {
-                    case "not_found":
-                        return "No peer has the file!";
-                    case "multiple_hash":
-                        return "Multiple hashes found!";
-                    default:
-                        return "Peer returned error: " + error.toString();
+            Message response = P2TConnectionController.sendFileRequest(PeerApp.getP2TConnection(), fileName);
+
+            if (response == null) {
+                return "No response from tracker!";
+            }
+
+            Object respType = response.getFromBody("response");
+            if ("error".equals(respType)) {
+                String error = (String) response.getFromBody("error");
+                if ("not_found".equals(error)) {
+                    return "No peer has the file!";
+                } else if ("multiple_hash".equals(error)) {
+                    return "Multiple hashes found!";
+                } else {
+                    return "Unknown error from tracker: " + error;
                 }
             }
-            if (!"ok".equals(responseStatus)) {
-                return "Unexpected response status: " + responseStatus.toString();
-            }
 
-            String hash = response.getFromBody("md5").toString();
-            String IP = response.getFromBody("peer_have").toString();
-            int port = response.getIntFromBody("peer_port");
+            String peerIP = (String) response.getFromBody("peer_have");
+            int peerPort = response.getIntFromBody("peer_port");
+            String md5 = (String) response.getFromBody("md5");
 
-            if (!PeerApp.requestDownload(IP, port, name, hash)) {
-                return "The file has been downloaded from peer but is corrupted!";
+            boolean downloadSuccess = PeerApp.requestDownload(peerIP, peerPort, fileName, md5);
+
+            if (downloadSuccess) {
+                return "File downloaded successfully: " + fileName;
             } else {
-                return "File downloaded successfully: " + name;
+                return "The file has been downloaded from peer but is corrupted!";
             }
+
         } catch (Exception e) {
-            return "Download failed: " + e.getMessage();
+            e.printStackTrace();
+            return "Unknown error from peer: " + e.getMessage();
         }
     }
-
-
 
     public static String endProgram() {
         PeerApp.endAll();

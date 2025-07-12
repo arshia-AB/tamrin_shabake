@@ -16,7 +16,7 @@ public class TrackerConnectionController {
 			String fileHash = message.getFromBody("file_hash");
 
 			if (fileName == null || fileHash == null) {
-				return createErrorResponse("Invalid request: missing file_name or file_hash");
+				return createErrorResponse("invalid_request");
 			}
 
 			List<Map<String, Object>> matchingPeers = new ArrayList<>();
@@ -26,23 +26,34 @@ public class TrackerConnectionController {
 				String hash = files.get(fileName);
 				if (hash != null && hash.equals(fileHash)) {
 					Map<String, Object> peerInfo = new HashMap<>();
-					peerInfo.put("ip", peer.getPeerIp());
-					peerInfo.put("listen_port", peer.getListenPort());
+					peerInfo.put("peer_have", peer.getPeerIp());
+					peerInfo.put("peer_port", peer.getListenPort());
 					matchingPeers.add(peerInfo);
 				}
+			}
+
+			if (matchingPeers.isEmpty()) {
+				return createErrorResponse("not_found");
+			}
+
+			if (matchingPeers.size() > 1) {
+				return createErrorResponse("multiple_hash");
 			}
 
 			HashMap<String, Object> body = new HashMap<>();
 			body.put("command", "file_request");
 			body.put("response", "ok");
-			body.put("peers", matchingPeers);
+			body.put("peer_have", matchingPeers.get(0).get("peer_have"));
+			body.put("peer_port", matchingPeers.get(0).get("peer_port"));
+			body.put("md5", fileHash);
 
 			return new Message(body, Message.Type.response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return createErrorResponse("Server error: " + e.getMessage());
+			return createErrorResponse("server_error");
 		}
 	}
+
 
 
 	public static Map<String, List<String>> getSends(PeerConnectionThread connection) {
@@ -86,7 +97,7 @@ public class TrackerConnectionController {
 	private static Message createErrorResponse(String errorMsg) {
 		HashMap<String, Object> body = new HashMap<>();
 		body.put("response", "error");
-		body.put("message", errorMsg);
+		body.put("error", errorMsg);
 		return new Message(body, Message.Type.response);
 	}
 }

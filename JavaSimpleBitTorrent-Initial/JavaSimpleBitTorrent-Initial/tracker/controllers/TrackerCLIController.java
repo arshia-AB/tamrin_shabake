@@ -76,6 +76,7 @@ public class TrackerCLIController {
         for (PeerConnectionThread connection : TrackerApp.getConnections()) {
             result.append(connection.getOtherSideIP()).append(":").append(connection.getOtherSidePort()).append("\n");
         }
+        if (result.toString().isEmpty()) return "No peers connected.";
         return result.toString().trim();
     }
 
