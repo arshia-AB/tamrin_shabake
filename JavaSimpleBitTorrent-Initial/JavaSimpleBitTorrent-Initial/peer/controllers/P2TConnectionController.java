@@ -76,8 +76,11 @@ public class P2TConnectionController {
 
     private static Message getReceives() {
         HashMap<String, Object> body = new HashMap<>();
-        body.put("received", PeerApp.getReceivedFiles());
+        body.put("command", "get_receives");
+        body.put("response", "ok");
+        body.put("received_files", PeerApp.getReceivedFiles());
         return new Message(body, Message.Type.response);
+
     }
 
     public static Message sendFileRequest(P2TConnectionThread tracker, String fileName) throws Exception {

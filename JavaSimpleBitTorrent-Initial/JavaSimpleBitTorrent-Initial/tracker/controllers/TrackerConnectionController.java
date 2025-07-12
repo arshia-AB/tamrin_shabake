@@ -7,6 +7,8 @@ import tracker.app.PeerConnectionThread;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static tracker.app.TrackerApp.TIMEOUT_MILLIS;
+
 
 public class TrackerConnectionController {
     private static final Map<String, PeerConnectionThread> peers = new ConcurrentHashMap<>();
@@ -82,10 +84,10 @@ public class TrackerConnectionController {
     public static Map<String, List<String>> getReceives(PeerConnectionThread connection) {
         try {
             Message msg = Message.createCommand("get_receives");
-            Message response = connection.sendAndWaitForResponse(msg, 3000);
+            Message response = connection.sendAndWaitForResponse(msg, TIMEOUT_MILLIS);
 
             if (response != null && "get_receives".equals(response.getFromBody("command"))) {
-                return response.getFromBody("files");
+                return response.getFromBody("received_files");
             }
         } catch (Exception e) {
             e.printStackTrace();

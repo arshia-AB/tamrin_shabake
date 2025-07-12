@@ -32,6 +32,12 @@ public class P2PListenerThread extends Thread {
 
                 File file = new File(PeerApp.getSharedFolderPath() + File.separator + fileName);
 
+
+                String md5 = common.utils.MD5Hash.HashFile(file.getPath());
+
+                PeerApp.addSentFile(receiver, fileName + " " + md5);
+
+
                 TorrentP2PThread torrentThread = new TorrentP2PThread(socket, file, receiver);
                 torrentThread.start();
             } else {
