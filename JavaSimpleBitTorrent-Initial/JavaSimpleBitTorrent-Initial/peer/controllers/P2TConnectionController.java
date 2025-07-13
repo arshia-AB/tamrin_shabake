@@ -65,12 +65,10 @@ public class P2TConnectionController {
 
 
     private static Message getSends() {
-        System.out.println("DEBUG: getSends called");
         HashMap<String, Object> body = new HashMap<>();
         body.put("command", "get_sends");
         body.put("response", "ok");
         body.put("sent_files", PeerApp.getSentFiles());
-        System.out.println("DEBUG: sent_files = " + PeerApp.getSentFiles());
         return new Message(body, Message.Type.response);
     }
 

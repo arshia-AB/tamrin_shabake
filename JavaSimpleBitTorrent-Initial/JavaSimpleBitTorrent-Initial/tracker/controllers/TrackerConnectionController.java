@@ -70,10 +70,8 @@ public class TrackerConnectionController {
         try {
             Message response = connection.sendAndWaitForResponse(request, TIMEOUT_MILLIS);
             Map<String, List<String>> sentFiles = response.getFromBody("sent_files");
-            System.out.println("DEBUG: getSends response sent_files: " + sentFiles);
             return sentFiles == null ? new HashMap<>() : sentFiles;
         } catch (Exception e) {
-            System.err.println("DEBUG: Request Timed out.");
             return new HashMap<>();
         }
     }

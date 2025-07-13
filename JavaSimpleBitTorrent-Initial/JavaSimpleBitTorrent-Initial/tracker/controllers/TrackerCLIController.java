@@ -49,13 +49,10 @@ public class TrackerCLIController {
     private static String getSends(String ip, int port) {
         PeerConnectionThread peer = TrackerApp.getConnectionByIpPort(ip, port);
         if (peer == null) {
-            System.out.println("DEBUG: PeerConnectionThread for " + ip + ":" + port + " not found.");
             return "Peer not found.";
         }
-        System.out.println("DEBUG: Found PeerConnectionThread for " + ip + ":" + port);
 
         Map<String, List<String>> sends = TrackerConnectionController.getSends(peer);
-        System.out.println("DEBUG: Received sends map: " + sends);
 
         if (sends.isEmpty()) {
             return "No files sent by " + ip + ":" + port;
