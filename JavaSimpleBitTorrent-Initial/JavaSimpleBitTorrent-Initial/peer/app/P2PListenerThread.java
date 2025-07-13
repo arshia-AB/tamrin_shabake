@@ -20,9 +20,11 @@ public class P2PListenerThread extends Thread {
 
     private void handleConnection(Socket socket) throws Exception {
         socket.setSoTimeout(TIMEOUT_MILLIS);
+        DataInputStream in = new DataInputStream(socket.getInputStream());
 
         try {
-            Message message = Message.readFrom(socket.getInputStream());
+            String jsonStr = in.readUTF();
+            Message message = JSONUtils.fromJson(jsonStr);
 
             if (message.getType() == Message.Type.download_request) {
                 String fileName = message.getFromBody("name");
@@ -32,12 +34,6 @@ public class P2PListenerThread extends Thread {
 
                 File file = new File(PeerApp.getSharedFolderPath() + File.separator + fileName);
 
-
-                String md5 = common.utils.MD5Hash.HashFile(file.getPath());
-
-                PeerApp.addSentFile(receiver, fileName + " " + md5);
-
-
                 TorrentP2PThread torrentThread = new TorrentP2PThread(socket, file, receiver);
                 torrentThread.start();
             } else {
@@ -46,11 +42,11 @@ public class P2PListenerThread extends Thread {
         } catch (Exception e) {
             try {
                 socket.close();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
             throw e;
         }
     }
+
 
     @Override
     public void run() {

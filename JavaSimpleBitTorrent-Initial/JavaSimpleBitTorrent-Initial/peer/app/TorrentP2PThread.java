@@ -1,8 +1,8 @@
 package peer.app;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
+import common.utils.MD5Hash;
+
+import java.io.*;
 import java.net.Socket;
 
 public class TorrentP2PThread extends Thread {
@@ -19,28 +19,29 @@ public class TorrentP2PThread extends Thread {
         PeerApp.addTorrentP2PThread(this);
     }
 
-    @Override
     public void run() {
-        try (var fileInputStream = new java.io.BufferedInputStream(new java.io.FileInputStream(file))) {
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             byte[] buffer = new byte[8192];
             int bytesRead;
+
             while ((bytesRead = fileInputStream.read(buffer)) != -1) {
                 dataOutputStream.write(buffer, 0, bytesRead);
             }
+
             dataOutputStream.flush();
 
-
-            String md5 = common.utils.MD5Hash.HashFile(file.getPath());
+            String md5 = MD5Hash.HashFile(file.getPath());
 
             PeerApp.addSentFile(receiver, file.getName() + " " + md5);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
                 dataOutputStream.close();
                 socket.close();
-            } catch (Exception ignored) {
+            } catch (IOException ignored) {
             }
+
             PeerApp.removeTorrentP2PThread(this);
         }
     }

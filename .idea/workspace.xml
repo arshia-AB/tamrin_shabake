@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="some bug fixed">
+    <list default="true" id="fda31056-3c81-4545-a796-ca1b30acf47a" name="Changes" comment="some bug fixed(2)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/PeerCLIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/app/TrackerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/app/TrackerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/P2PListenerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/P2PListenerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/PeerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/PeerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/TorrentP2PThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/app/TorrentP2PThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/peer/controllers/P2TConnectionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCLIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/JavaSimpleBitTorrent-Initial/JavaSimpleBitTorrent-Initial/tracker/controllers/TrackerConnectionController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +73,7 @@
       <recent name="peer.controllers" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TrackerMain">
+  <component name="RunManager" selected="Application.peer2">
     <configuration name="PeerMain" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="peer.PeerMain" />
       <module name="tamrin shabake" />
@@ -275,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752347839700</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="some bug fixed(2)">
+      <option name="closed" value="true" />
+      <created>1752348157825</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1752348157825</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -308,7 +318,8 @@
     <MESSAGE value="download is fixing(3)" />
     <MESSAGE value="get_receive dorost shod" />
     <MESSAGE value="some bug fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="some bug fixed" />
+    <MESSAGE value="some bug fixed(2)" />
+    <option name="LAST_COMMIT_MESSAGE" value="some bug fixed(2)" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/tamrin_shabake$peer2.ic" NAME="peer2 Coverage Results" MODIFIED="1752335429873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />

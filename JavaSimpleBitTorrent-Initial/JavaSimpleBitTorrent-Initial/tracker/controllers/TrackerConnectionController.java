@@ -66,20 +66,17 @@ public class TrackerConnectionController {
 
 
     public static Map<String, List<String>> getSends(PeerConnectionThread connection) {
+        Message request = Message.createCommand("get_sends");
         try {
-            Message msg = Message.createCommand("get_sends");
-            Message response = connection.sendAndWaitForResponse(msg, TIMEOUT_MILLIS);
-
-            if (response != null && "get_sends".equals(response.getFromBody("command"))) {
-                return response.getFromBody("sent_files");
-            }
+            Message response = connection.sendAndWaitForResponse(request, TIMEOUT_MILLIS);
+            Map<String, List<String>> sentFiles = response.getFromBody("sent_files");
+            System.out.println("DEBUG: getSends response sent_files: " + sentFiles);
+            return sentFiles == null ? new HashMap<>() : sentFiles;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("DEBUG: Request Timed out.");
+            return new HashMap<>();
         }
-        return Collections.emptyMap();
-
     }
-
 
 
     public static Map<String, List<String>> getReceives(PeerConnectionThread connection) {

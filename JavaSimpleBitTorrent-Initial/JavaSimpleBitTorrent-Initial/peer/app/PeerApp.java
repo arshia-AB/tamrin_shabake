@@ -96,6 +96,8 @@ public class PeerApp {
     }
 
     public static synchronized void addSentFile(String receiver, String fileNameAndHash) {
+        System.out.println("DEBUG: addSentFile called with receiver=" + receiver + " file=" + fileNameAndHash);
+
         sentFiles.computeIfAbsent(receiver, k -> new ArrayList<>()).add(fileNameAndHash);
     }
 
