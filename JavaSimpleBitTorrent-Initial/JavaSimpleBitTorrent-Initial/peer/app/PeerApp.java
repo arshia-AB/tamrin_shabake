@@ -155,7 +155,7 @@ public class PeerApp {
             addReceivedFile(senderIP + ":" + senderPort, filename + " " + md5);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
     }

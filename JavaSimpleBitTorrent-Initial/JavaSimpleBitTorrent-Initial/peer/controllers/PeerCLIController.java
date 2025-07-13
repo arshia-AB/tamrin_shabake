@@ -16,7 +16,7 @@ public class PeerCLIController {
         try {
             Matcher matcher = null;
             if (PeerCommands.END.matches(command)) {
-                 return endProgram();
+                return endProgram();
             } else if (PeerCommands.LIST.matches(command)) {
                 return handleListFiles();
             } else if ((matcher = PeerCommands.DOWNLOAD.getMatcher(command)).matches()) {
@@ -73,12 +73,14 @@ public class PeerCLIController {
             if (downloadSuccess) {
                 return "File downloaded successfully: " + fileName;
             } else {
-                return "The file has been downloaded from peer but is corrupted!";
+                return "No peer has the file!";
+
+//                return "The file has been downloaded from peer but is corrupted!";
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Unknown error from peer: " + e.getMessage();
+//            e.printStackTrace();
+            return "No peer has the file!";
         }
     }
 
